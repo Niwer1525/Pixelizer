@@ -1,0 +1,156 @@
+:root {
+    --bg-color: #000000;
+    --surface-color: #0a0a0a;
+    --surface-glass: rgba(20, 20, 20, 0.6);
+    --surface-glass-hover: rgba(40, 40, 40, 0.7);
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --menu-bg: #111;
+    --scrollbar-bg: rgba(255, 255, 255, 0.05);
+    --scrollbar-thumb: #333;
+    --scrollbar-thumb-hover: #555;
+
+    --accent-color: #d8b4fe;
+    --accent-glow: rgba(216, 180, 254, 0.3);
+
+    --border-radius: 16px;
+    --transition-speed: 0.3s;
+    --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Light theme */
+html[data-theme="light"] {
+    --bg-color: #f7f7fb;
+    --surface-color: #ffffff;
+    --surface-glass: rgba(255, 255, 255, 0.75);
+    --surface-glass-hover: rgba(248, 248, 255, 0.95);
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --border-color: rgba(0, 0, 0, 0.12);
+    --menu-bg: #ffffff;
+    --scrollbar-bg: rgba(0, 0, 0, 0.1);
+    --scrollbar-thumb: #ccc;
+    --scrollbar-thumb-hover: #aaa;
+
+    --accent-color: #7c3aed;
+    --accent-glow: rgba(124, 58, 237, 0.25);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+/* Selection */
+::selection {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+
+/* Number Input Spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* Range Slider Styling */
+input[type="range"] {
+    accent-color: var(--accent-color);
+}
+input[type="range"]::-webkit-slider-thumb {
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Base Typography & Background */
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(120, 40, 200, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(120, 40, 200, 0.05), transparent 25%);
+}
+
+/* Custom Focus/Hover Utilities */
+.glass-input {
+    background: var(--surface-glass-hover);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    display: flex;
+}
+.glass-input:focus-within {
+    background: var(--surface-glass-hover);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(216, 180, 254, 0.1);
+}
+.glass-input textarea, .glass-input input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+    font-family: inherit;
+}
+
+.glass-button {
+    border-radius: 50px;
+    background: var(--surface-glass);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-speed);
+    backdrop-filter: blur(4px);
+}
+.glass-button:hover:not(:disabled) {
+    background: rgba(216, 180, 254, 0.15);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(216, 180, 254, 0.2);
+    color: var(--text-primary);
+}
+.glass-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.primary-button {
+    border-radius: 50px;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border: 1px solid var(--accent-color);
+    transition: all var(--transition-speed);
+}
+.primary-button:hover:not(:disabled) {
+    box-shadow: 0 4px 12px var(--accent-glow);
+    transform: translateY(-2px);
+}
+.primary-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.generated-card {
+    transition: all var(--transition-speed);
+}
+.generated-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 20px rgba(216, 180, 254, 0.15);
+    z-index: 5;
+}
+.generated-card img {
+    transition: transform 0.5s;
+}
+.generated-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Drag state utility */
+.dropzone-dragging {
+    border-color: var(--accent-color) !important;
+    background-color: rgba(216,180,254,0.1) !important;
+}
