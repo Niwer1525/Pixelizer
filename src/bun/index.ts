@@ -2,6 +2,8 @@ import { BrowserWindow, BrowserView } from "electrobun/bun";
 import { type MainSchema } from '../shared/types';
 import { generate_images } from './generator';
 import { load_settings, save_settings } from './settings';
+import { getAppDataDir } from './utils';
+import { ensurePythonEnv } from './python';
 
 /* Create the RPC */
 const RPC = BrowserView.defineRPC<MainSchema>({
@@ -42,3 +44,9 @@ const window = new BrowserWindow({
 	rpc: RPC,
 });
 export const webView = window.webview;
+
+/* Install python environment at start if not already installed. (This check is also done when clicking the Generate Button) */
+ensurePythonEnv();
+
+/* Print the path to the application dir */
+console.log("Application folder is at : " + getAppDataDir());
