@@ -15,7 +15,12 @@ export default {
 		copy: {
 			"src/mainview/index.html": "views/mainview/index.html",
 			"src/mainview/style.css": "views/mainview/style.css",
-			"src/mainview/main.js": "views/mainview/main.js",
+
+			"src/mainview/js/api.js": "views/mainview/js/api.js",
+			"src/mainview/js/board.js": "views/mainview/js/board.js",
+			"src/mainview/js/main.js": "views/mainview/js/main.js",
+			"src/mainview/js/theme.js": "views/mainview/js/theme.js",
+			"src/mainview/js/ui-components.js": "views/mainview/js/ui-components.js",
 		},
 		mac: {
 			bundleCEF: false,
