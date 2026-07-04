@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
         heightInput.dispatchEvent(new Event('blur'));
 
         setStatus("Generating...");
-
         view.rpc?.request.generate_images({
             prompt: document.getElementById('prompt-desc').value,
             refImage,
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => {
             /* If an error occured */
             if(!response || !response.success || !response.images)
-                throw new Error(`Error generating images. ${JSON.stringify(response)}`);
+                throw new Error(`Error reading generated RPC response. ${JSON.stringify(response)}`);
 
             setStatus("Complete", response.images);
         }).catch(error => {

@@ -4,6 +4,21 @@ const generateBtn = document.getElementById('generate-btn');
 const boardContainer = document.getElementById('generation-board-container');
 const numImagesInput = document.getElementById('num-images-input');
 
+document.addEventListener('click', function(event) {
+    // Check if the clicked element has the class 'save-btn'
+    if (event.target.classList.contains('save-btn')) {
+        const buttonElement = event.target;
+        const src = buttonElement.getAttribute('data-src');
+        const index = buttonElement.getAttribute('data-index');
+        
+        // Your existing download logic
+        var a = document.createElement("a");
+        a.href = "data:image/png;base64," + src;
+        a.download = `Generated-image-${index}.png`;
+        a.click();
+    }
+});
+
 export function renderBoard(status, generatedImages) {
     if (status === 'Generating...') {
         let skeletons = '<div id="generation-board" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 auto-rows-max">';
@@ -21,7 +36,7 @@ export function renderBoard(status, generatedImages) {
         generatedImages.forEach((src, i) => {
             grid += `
                 <div class="generated-card aspect-square bg-[var(--surface-glass)] border border-[var(--border-color)] rounded-[var(--border-radius)] overflow-hidden backdrop-blur-md relative group">
-                    <img src="${src}" alt="Generated result ${i + 1}" class="w-full h-full object-cover" />
+                    <img src="data:image/png;base64, ${src}" alt="Generated result ${i + 1}" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-color)] via-transparent to-[var(--bg-color)] opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex flex-col justify-between p-4 pointer-events-none group-hover:pointer-events-auto">
                         <div class="flex justify-end">
                             <button class="glass-button px-3 py-1.5 text-xs font-semibold tracking-wide text-[var(--text-primary)] flex items-center gap-1.5" title="Use as reference">
@@ -30,7 +45,7 @@ export function renderBoard(status, generatedImages) {
                         </div>
                         <div class="flex justify-between items-center translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             <span class="text-xs font-mono text-[var(--accent-color)] bg-[var(--menu-bg)] border border-[var(--border-color)] px-2.5 py-1 rounded-[50px]">#${i + 1}</span>
-                            <button class="primary-button px-4 py-1.5 text-sm font-semibold shadow-lg">Save</button>
+                            <button class="save-btn primary-button px-4 py-1.5 text-sm font-semibold shadow-lg" data-src="${src}" data-index="${i}">Save</button>
                         </div>
                     </div>
                 </div>`;

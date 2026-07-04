@@ -24,7 +24,7 @@ const RPC = BrowserView.defineRPC<MainSchema>({
 					const images = await generate_images(args);
 					return { success: true, images };
 				} catch (e: any) {
-					return { success: false, error: `Failed to parse Python response: ${e.message}` };
+					return { success: false, error: `Failed to generate pixel-art: ${e.message}` };
 				}
 			}
 		},

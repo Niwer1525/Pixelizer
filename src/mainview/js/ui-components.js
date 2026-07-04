@@ -4,7 +4,7 @@ export function setupDimensionEnforcement(inputElement) {
         let val = parseInt(e.target.value, 10);
 
         if (isNaN(val)) {
-            e.target.value = 512;
+            e.target.value = 1024;
             return;
         }
 

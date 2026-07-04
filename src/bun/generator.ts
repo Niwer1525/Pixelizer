@@ -1,30 +1,27 @@
 import { join } from 'path';
+import { type ImageGenerationArgs } from '../shared/objects';
+import { ensurePythonEnv } from './python';
 import { processImage } from './snapper/snapper';
 import { getGeneratedImagesPath } from './utils';
-import { ensurePythonEnv } from './python';
-import { type ImageGenerationArgs } from '../shared/objects';
 
-export async function generate_images(args: ImageGenerationArgs) {
-    console.log("Processing images");
-
-    const imagesPaths = [
-        "/home/niwer/.config/Pixelizer/generated_images/generated_0.png"
-    ];
-    const resultImages = [ "" ];
-
-    /* For each images in the grid, process them */
+export async function snap_images(imagesPaths: any) {
+    console.log("Starting snapping images...");
+    
+    const resultImages = []; // Initialize as an empty array for the base64 results
     for (let path of imagesPaths) {
         try {
             const file = Bun.file(path);
-            const fileName = path.split("/").pop();
+            if (!(await file.exists())) continue; // Skip if the files doesn't exist
+
             const arrayBuffer = await file.arrayBuffer();
             const inputBuffer = Buffer.from(arrayBuffer);
             
-            console.log("Processing grid extraction logic...");
+            console.log(`Processing grid extraction logic for : ${path}`);
             const outputBuffer = await processImage(inputBuffer, { kColors: 16 });
-    
-            // Write back down to standard disk using Bun
-            await Bun.write(getGeneratedImagesPath() + "/output_fixed.png", outputBuffer);
+
+            /* Base64 */
+            const base64Image = outputBuffer.toString('base64'); // Convert the output buffer to a Base64 string
+            resultImages.push(base64Image); // Push to the results array
         } catch (e) {
             console.error("Error ", e);
         }
@@ -33,7 +30,7 @@ export async function generate_images(args: ImageGenerationArgs) {
     return resultImages;
 }
 
-export async function generate_images_s(args: ImageGenerationArgs) {
+export async function generate_images(args: ImageGenerationArgs) {
     console.log("Starting image generation...");
     try {
         const pythonExecutable = await ensurePythonEnv();
@@ -94,7 +91,7 @@ export async function generate_images_s(args: ImageGenerationArgs) {
             if (!jsonLine) throw new Error(`No JSON found in stdout. Raw output: ${stdoutOutput}`);
             const response = JSON.parse(jsonLine);
             
-            if (response.status === "success") return response.images; // Return the array of strings
+            if (response.status === "success") return snap_images(response.images); // Return the array of strings
             else throw new Error(response.error || "Unknown execution error occurred.");
         } catch (e: any) {
             throw new Error(`Failed to parse Python response: ${e.message}`);

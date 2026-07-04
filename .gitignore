@@ -6,3 +6,6 @@ artifacts/
 
 # Python
 __pycache__
+
+# VScode
+.vscode
