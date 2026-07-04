@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let refImage = null;
     let styleImage = null;
     let status = 'Idle';
-    let generatedImages = [];
 
     // UI Cache Elements
     const generateBtn = document.getElementById('generate-btn');
@@ -17,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const heightInput = document.getElementById('height-input');
     const settingsModal = document.getElementById('settings-modal-overlay');
 
-    // 1. Initialize Theme Engine
+    // Initialize Theme Engine
     initTheme('theme-select');
 
-    // 2. Initialize UI Components
+    // Initialize UI Components
     setupDimensionEnforcement(widthInput);
     setupDimensionEnforcement(heightInput);
 
@@ -31,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDropzone('style', (val) => { styleImage = val; });
 
     // Helper to change local state and trigger UI updates
-    const setStatus = (newStatus) => {
+    const setStatus = (newStatus, generatedImages) => {
         status = newStatus;
-        updateStatusUI(status, generatedImages);
+        updateStatusUI(status, generatedImages || []);
     };
 
-    // 3. Application Data Methods
+    // Application Data Methods
     async function loadAppSettings() {
         try {
             const settings = await view.rpc?.request.load_settings();
@@ -62,34 +61,30 @@ document.addEventListener('DOMContentLoaded', () => {
         heightInput.dispatchEvent(new Event('blur'));
 
         setStatus("Generating...");
-        generatedImages = [];
 
-        try {
-            const response = await view.rpc?.request.generate_images({
-                prompt: document.getElementById('prompt-desc').value,
-                refImage,
-                styleImage,
-                refWeight: parseFloat(document.getElementById('ref-weight-slider').value),
-                styleWeight: parseFloat(document.getElementById('style-weight-slider').value),
-                numImages: parseInt(numImagesInput.value),
-                width: parseInt(widthInput.value, 10),
-                height: parseInt(heightInput.value, 10),
-                generationStyle: document.getElementById('style-enum-select').value,
-                transparentBg: document.getElementById('transparent-bg-checkbox').checked,
-                negativePrompt: document.getElementById('negative-prompt-desc').value,
-                seed: document.getElementById('seed-input').value || null
-            });
-
+        view.rpc?.request.generate_images({
+            prompt: document.getElementById('prompt-desc').value,
+            refImage,
+            styleImage,
+            refWeight: parseFloat(document.getElementById('ref-weight-slider').value),
+            styleWeight: parseFloat(document.getElementById('style-weight-slider').value),
+            numImages: parseInt(numImagesInput.value),
+            width: parseInt(widthInput.value, 10),
+            height: parseInt(heightInput.value, 10),
+            generationStyle: document.getElementById('style-enum-select').value,
+            transparentBg: document.getElementById('transparent-bg-checkbox').checked,
+            negativePrompt: document.getElementById('negative-prompt-desc').value,
+            seed: document.getElementById('seed-input').value || null
+        }).then(response => {
             /* If an error occured */
             if(!response || !response.success || !response.images)
                 throw new Error(`Error generating images. ${JSON.stringify(response)}`);
 
-            generatedImages = response.images;
-            setStatus("Complete");
-        } catch (error) {
+            setStatus("Complete", response.images);
+        }).catch(error => {
             console.error(error);
             setStatus("Error");
-        }
+        });
     });
 
     // Settings Modal Navigation

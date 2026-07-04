@@ -1,9 +1,9 @@
-import { BrowserWindow, BrowserView } from "electrobun/bun";
+import { BrowserView, BrowserWindow } from "electrobun/bun";
 import { type MainSchema } from '../shared/types';
 import { generate_images } from './generator';
+import { ensurePythonEnv } from './python';
 import { load_settings, save_settings } from './settings';
 import { getAppDataDir } from './utils';
-import { ensurePythonEnv } from './python';
 
 /* Create the RPC */
 const RPC = BrowserView.defineRPC<MainSchema>({

@@ -1,9 +1,39 @@
-import { join } from "path";
+import { join } from 'path';
+import { processImage } from './snapper/snapper';
 import { getGeneratedImagesPath } from './utils';
 import { ensurePythonEnv } from './python';
 import { type ImageGenerationArgs } from '../shared/objects';
 
 export async function generate_images(args: ImageGenerationArgs) {
+    console.log("Processing images");
+
+    const imagesPaths = [
+        "/home/niwer/.config/Pixelizer/generated_images/generated_0.png"
+    ];
+    const resultImages = [ "" ];
+
+    /* For each images in the grid, process them */
+    for (let path of imagesPaths) {
+        try {
+            const file = Bun.file(path);
+            const fileName = path.split("/").pop();
+            const arrayBuffer = await file.arrayBuffer();
+            const inputBuffer = Buffer.from(arrayBuffer);
+            
+            console.log("Processing grid extraction logic...");
+            const outputBuffer = await processImage(inputBuffer, { kColors: 16 });
+    
+            // Write back down to standard disk using Bun
+            await Bun.write(getGeneratedImagesPath() + "/output_fixed.png", outputBuffer);
+        } catch (e) {
+            console.error("Error ", e);
+        }
+    }
+
+    return resultImages;
+}
+
+export async function generate_images_s(args: ImageGenerationArgs) {
     console.log("Starting image generation...");
     try {
         const pythonExecutable = await ensurePythonEnv();

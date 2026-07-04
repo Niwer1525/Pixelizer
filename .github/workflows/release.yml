@@ -1,0 +1,43 @@
+name: Release Pixelizer
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger when receive new tag
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Swap Node.js for Bun
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Fast dependency installation with Bun
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Trigger the "build:all" script to compile the 4 binaries into ./dist
+      - name: Build Single-File Executables
+        run: bun run build:all
+
+      # Create GitHub Release and upload all executables
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/pixelizer-linux
+            dist/pixelizer-windows.exe
+            dist/pixelizer-mac-intel
+            dist/pixelizer-mac-silicon
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

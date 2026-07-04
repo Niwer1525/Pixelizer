@@ -7,7 +7,10 @@
 		"dev": "electrobun dev --watch"
 	},
 	"dependencies": {
-		"electrobun": "1.18.1"
+		"@types/pngjs": "^6.0.5",
+		"@types/seedrandom": "^3.0.8",
+		"electrobun": "1.18.1",
+		"seedrandom": "^3.0.5"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"
