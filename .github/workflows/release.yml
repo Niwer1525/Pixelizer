@@ -3,41 +3,68 @@ name: Release Pixelizer
 on:
   push:
     tags:
-      - 'v*' # Trigger when receive new tag
+      - 'v*'
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: pixelizer-linux
+          - os: windows-latest
+            artifact_name: pixelizer-windows.exe
+          - os: macos-latest
+            artifact_name: pixelizer-mac # Electrobun handles architecture-specific builds here
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Swap Node.js for Bun
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      # Fast dependency installation with Bun
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # Trigger the "build:all" script to compile the 4 binaries into ./dist
-      - name: Build Single-File Executables
-        run: bun run build:all
+      # Run the build command specific to the current runner
+      - name: Build Electrobun
+        run: bun run electrobun build --env=stable
 
-      # Create GitHub Release and upload all executables
+      # Rename/locate the artifact for the release step
+      - name: Rename artifact
+        shell: bash
+        run: |
+          mkdir -p ./dist
+          # Adjust these paths based on where Electrobun places your output
+          mv artifacts/dist/binary_name ./${{ matrix.artifact_name }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist
+          merge-multiple: true
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/pixelizer-linux
-            dist/pixelizer-windows.exe
-            dist/pixelizer-mac-intel
-            dist/pixelizer-mac-silicon
+          files: ./dist/*
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
