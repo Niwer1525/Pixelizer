@@ -11,18 +11,26 @@ export const EMPTY_SETTINGS = {
 };
 
 export interface ImageGenerationArgs {
-  prompt: string;
-  refImage: string;
-  styleImage: string;
-  refWeight: number;
-  styleWeight: number;
-  numImages: number;
-  width: number;
-  height: number;
-  generationStyle: string;
-  transparentBg: boolean;
-  negativePrompt: string;
-  seed: string | null;
+    num_images: number;
+
+    prompt: string;
+
+    reference_image: string;
+    style_image: string;
+    reference_inference: number;
+    style_inference: number;
+
+    negative_prompt: string;
+
+    width: number | 1024;
+    height: number | 1024;
+    transparentBg: boolean | true;
+
+    generationStyle: string;
+
+    seed: string | null;
+    guidance_scale: number | 6.5;
+    num_inference_steps: number | 24;
 }
 
 export const DEFAULT_GENERATION_ARGS = {
@@ -35,11 +43,10 @@ export const DEFAULT_GENERATION_ARGS = {
     reference_inference: 0.5,
     style_inference: 1.0,
     
-    negative_prompt: "No realistic images",
+    negative_prompt: "photorealistic, realistic, 3d, render, cgi, photography, painting, drawing, sketch, smooth, gradients, anti-aliased, blurry, soft focus, high definition, 4k, wallpaper, grainy, noisy, text, watermark, signature, distorted, bad anatomy",
 
-    width: 640,
-    height: 360,
-    transparentBg: false,
+    width: 1024,
+    height: 1024,
 
     seed: "123456789",
     guidance_scale: 6.5,

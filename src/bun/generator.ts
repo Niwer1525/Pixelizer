@@ -23,7 +23,7 @@ export async function snap_images(imagesPaths: any) {
             const base64Image = outputBuffer.toString('base64'); // Convert the output buffer to a Base64 string
             resultImages.push(base64Image); // Push to the results array
         } catch (e) {
-            console.error("Error ", e);
+            console.error("Error while snapping:", e);
         }
     }
 
@@ -41,19 +41,33 @@ export async function generate_images(args: ImageGenerationArgs) {
             stderr: "pipe",
         });
 
-        // TODO add support for transparentBg, style selector
+        /* Prompt customization, we add the pixel tag, the transparent background and the view angle */
+        let prompt = "pixel, flat shading, low-color count, ";
+        if(args.transparentBg) prompt += "transparent background, no background, ";
+        if(args.generationStyle) {
+            switch(args.generationStyle.toLocaleLowerCase()) {
+                case "isometric":
+                    prompt += " isometric view, ";
+                    break;
+                case "topdown":
+                    prompt += " top down view, ";
+                    break;
+                case "none": break;
+            }
+        }
+        prompt += args.prompt;
 
         const payload = JSON.stringify({
-            num_images: args.numImages,
+            num_images: args.num_images,
 
-            prompt: args.prompt,
+            prompt: prompt,
 
-            reference_image: args.refImage,
-            style_image: args.styleImage,
-            reference_inference: args.refWeight,
-            style_inference: args.styleWeight,
+            reference_image: args.reference_image,
+            style_image: args.style_image,
+            reference_inference: args.reference_inference,
+            style_inference: args.style_inference,
 
-            negative_prompt: args.negativePrompt,
+            negative_prompt: args.negative_prompt,
 
             seed: "",
             width: args.width,

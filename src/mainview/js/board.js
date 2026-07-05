@@ -10,11 +10,12 @@ document.addEventListener('click', function(event) {
         const buttonElement = event.target;
         const src = buttonElement.getAttribute('data-src');
         const index = buttonElement.getAttribute('data-index');
+        const time = new Date().getDate();
         
         // Your existing download logic
         var a = document.createElement("a");
         a.href = "data:image/png;base64," + src;
-        a.download = `Generated-image-${index}.png`;
+        a.download = `Generated-image-${index}-${time}.png`;
         a.click();
     }
 });

@@ -28,7 +28,7 @@ def get_default_config():
         "reference_inference": 0.5,
         "style_inference": 1.0,
         
-        "negative_prompt": "No realistic images",
+        "negative_prompt": "photorealistic, realistic, 3d, render, cgi, photography, painting, drawing, sketch, smooth, gradients, anti-aliased, blurry, soft focus, high definition, 4k, wallpaper, grainy, noisy, text, watermark, signature, distorted, bad anatomy",
 
         "width": 640,
         "height": 360,

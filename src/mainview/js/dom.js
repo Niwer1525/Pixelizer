@@ -62,17 +62,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setStatus("Generating...");
         view.rpc?.request.generate_images({
+            num_images: parseInt(numImagesInput.value),
+
             prompt: document.getElementById('prompt-desc').value,
-            refImage,
-            styleImage,
-            refWeight: parseFloat(document.getElementById('ref-weight-slider').value),
-            styleWeight: parseFloat(document.getElementById('style-weight-slider').value),
-            numImages: parseInt(numImagesInput.value),
+
+            reference_image: refImage,
+            style_image: styleImage,
+            reference_inference: parseFloat(document.getElementById('ref-weight-slider').value),
+            style_inference: parseFloat(document.getElementById('style-weight-slider').value),
+
+            negative_prompt: document.getElementById('negative-prompt-desc').value,
+
             width: parseInt(widthInput.value, 10),
             height: parseInt(heightInput.value, 10),
-            generationStyle: document.getElementById('style-enum-select').value,
             transparentBg: document.getElementById('transparent-bg-checkbox').checked,
-            negativePrompt: document.getElementById('negative-prompt-desc').value,
+
+            generationStyle: document.getElementById('style-enum-select').value,
+            
             seed: document.getElementById('seed-input').value || null
         }).then(response => {
             /* If an error occured */

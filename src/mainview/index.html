@@ -33,6 +33,7 @@
                 <label for="style-enum-select" class="text-sm font-medium text-[var(--text-secondary)]">Style</label>
                 <div class="glass-input relative">
                     <select id="style-enum-select" class="w-full p-3 bg-transparent border-none outline-none text-[var(--text-primary)] cursor-pointer appearance-none">
+                        <option value="None" class="bg-[var(--menu-bg)]">None</option>
                         <option value="Isometric" class="bg-[var(--menu-bg)]">Isometric</option>
                         <option value="TopDown" class="bg-[var(--menu-bg)]">TopDown</option>
                     </select>
@@ -143,7 +144,7 @@
             <div class="flex flex-col gap-1.5">
                 <label for="num-images-input" class="text-sm font-medium text-[var(--text-secondary)]">Images to generate</label>
                 <div class="glass-input max-w-[200px] !rounded-[50px]">
-                    <input id="num-images-input" type="number" min="1" max="8" value="4" class="p-3 text-center text-sm" />
+                    <input id="num-images-input" type="number" min="1" max="8" value="2" class="p-3 text-center text-sm" />
                 </div>
             </div>
 

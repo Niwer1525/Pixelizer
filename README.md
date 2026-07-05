@@ -2,7 +2,7 @@
 
 Pixelizer is a lightweight, local desktop application designed to generate high-quality pixel-art placeholders for game prototyping.
 
-While tools like `SpriteFusion` or `PixelLabs` leverage AI beautifully, they are often **cloud-based**, limited by **subscription** models, and **costly over time**. Pixelizer offers a **free**, **local** alternative powered by Stable Diffusion and the [Nerijs Pixel Art XL](https://huggingface.co/nerijs/pixel-art-xl) SafeTensors model.
+While tools like [SpriteFusion](https://www.spritefusion.com/)` or [PixelLabs](https://www.pixellab.ai) leverage AI beautifully, they are often **cloud-based**, limited by **subscription** models, and **costly over time**. Pixelizer offers a **free**, **local** alternative powered by Stable Diffusion and the [Nerijs Pixel Art XL](https://huggingface.co/nerijs/pixel-art-xl) SafeTensors model.
 
 ### A note on Ethics & Artists
 Generative AI is fantastic for fast prototyping, but it cannot replace the vision, consistency, and soul that professional artists bring to a game.

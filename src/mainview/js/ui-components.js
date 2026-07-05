@@ -64,9 +64,15 @@ export function setupDropzone(type, onUpdate) {
     input.addEventListener('change', (e) => loadFile(e.target.files[0]));
     clearBtn.addEventListener('click', clearFile);
 
-    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dropzone-dragging'); });
-    dropzone.addEventListener('dragleave', (e) => { e.preventDefault(); dropzone.classList.remove('dropzone-dragging'); });
-    dropzone.addEventListener('drop', (e) => {
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dropzone-dragging');
+    });
+    dropzone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dropzone-dragging');
+    });
+    dropzone.addEventListener('drop', async e => {
         e.preventDefault();
         dropzone.classList.remove('dropzone-dragging');
         if (e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
