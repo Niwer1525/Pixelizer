@@ -89,3 +89,16 @@ export interface Profiles {
     colProj: number[];
     rowProj: number[];
 }
+
+export const REMOVE_BG_CONFIG = {
+    model: 'medium' as 'medium' | 'small', // Explicitly cast the string - 'small' (faster, less accurate), 'medium' (default)
+    debug: true,
+    output: {
+        format: 'image/webp' as 'image/png' | 'image/jpeg' | 'image/webp' | 'image/x-rgba8',
+        quality: 0.8,
+        type: 'foreground' as 'foreground' | 'background' | 'mask', // The output type. (Default "foreground")
+    },
+    progress: (key: string, current: number, total: number) => {
+        console.log(`Downloading ${key}: ${current} of ${total}`);
+    }
+};

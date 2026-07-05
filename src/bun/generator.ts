@@ -1,10 +1,11 @@
+import { removeBackground } from "@imgly/background-removal-node";
 import { join } from 'path';
-import { type ImageGenerationArgs } from '../shared/objects';
+import { type ImageGenerationArgs, REMOVE_BG_CONFIG } from '../shared/objects';
 import { ensurePythonEnv } from './python';
 import { processImage } from './snapper/snapper';
 import { getGeneratedImagesPath } from './utils';
 
-export async function snap_images(imagesPaths: any) {
+async function snap_images(imagesPaths: any, kColors: number = 16) {
     console.log("Starting snapping images...");
     
     const resultImages = []; // Initialize as an empty array for the base64 results
@@ -17,7 +18,7 @@ export async function snap_images(imagesPaths: any) {
             const inputBuffer = Buffer.from(arrayBuffer);
             
             console.log(`Processing grid extraction logic for : ${path}`);
-            const outputBuffer = await processImage(inputBuffer, { kColors: 16 });
+            const outputBuffer = await processImage(inputBuffer, { kColors: kColors });
 
             /* Base64 */
             const base64Image = outputBuffer.toString('base64'); // Convert the output buffer to a Base64 string
@@ -28,6 +29,24 @@ export async function snap_images(imagesPaths: any) {
     }
 
     return resultImages;
+}
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+async function processSprite(inputPath: string) {
+    const blob = await removeBackground(inputPath, REMOVE_BG_CONFIG);
+    // 'blob' now contains your transparent PNG data
+
+    return []
+    // return [
+    //     blobToBase64(blob)
+    // ]
 }
 
 export async function generate_images(args: ImageGenerationArgs) {

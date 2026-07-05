@@ -8,12 +8,17 @@
 		"build:stable": "electrobun build --env=stable"
 	},
 	"dependencies": {
+		"@imgly/background-removal-node": "^1.4.5",
 		"@types/pngjs": "^6.0.5",
 		"@types/seedrandom": "^3.0.8",
 		"electrobun": "1.18.1",
-		"seedrandom": "^3.0.5"
+		"seedrandom": "^3.0.5",
+		"sharp": "^0.35.3"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"@types/bun": "^1.3.14"
+	},
+	"overrides": {
+		"sharp": "0.35.3"
 	}
 }
